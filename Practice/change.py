@@ -22,7 +22,6 @@ def change1(price, payment):
 
     while amount_left > 0:
 
-        print(amount_left)
         if amount_left >= 2000:
             global twenties
             twenties += amount_left // 2000
@@ -60,13 +59,12 @@ def change1(price, payment):
 
         else:
             global pennies
-            print(str(amount_left))
             pennies += math.floor(amount_left / 1)
             amount_left -= pennies * 1
 
 change1(price, payment)
 
-print("Change for a payment of " + str(payment) + " and a price of " + str(price) + " is:")
+print("Change for a payment of $" + str(round(payment, 2)) + " and a price of $" + str(round(price, 2)) + " is:")
 
 if (twenties > 0):
     print(" twenties, ", end="")
@@ -83,4 +81,4 @@ if (dimes > 0):
 if (nickels > 0):
     print(str(round(nickels)) + " nickels, ", end='')
 if (pennies > 0):
-    print(str(round(pennies)) + " pennies, ", end='')
+    print(str(round(pennies)) + " pennies")
