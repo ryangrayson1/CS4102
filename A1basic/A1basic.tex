@@ -115,8 +115,12 @@ $\sqrt{2}$ is irrational.
         xy &= (2^b - 1)(1 + 2^b + ... + 2^{(a - 1)b}) \\
            &= 2^b(1 + 2^b + ... + 2^{(a - 1)b}) - (1 + 2^b + ... + 2^{(a - 1)b}) \\
            &= 2^{ab} - 1 \\
+           \label{eq5}
            &= 2^n - 1.
     \end{align}
+    Since $b < n$, then $x = 2^b - 1 < 2^n - 1$. Likewise, since $ab = n > a$, we know that $b > 1$ and 
+    $x = 2^b - 1 > 2 - 1 = 1$. Therefore, $y < xy = 2^n - 1$ and $2^n - 1$ can be written as the multiplication
+    of $x$ and $y$ by Equation \ref{eq5}. Therefore $2^n - 1$ is not prime.
 \end{proof}
 
 
