@@ -1,5 +1,11 @@
 */.DS_Store
 .DS_Store
+
 */*.aux
 */*.out
 */*.log
+*/*.bbl
+*/*.gz
+*/*.fls
+*/*.fdb_latexmk
+*/*.blg
