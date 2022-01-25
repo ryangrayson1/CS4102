@@ -101,6 +101,24 @@ $\sqrt{2}$ is irrational.
     If $n \in \Z$ is a non-prime integer with $n>1$, then $2^n - 1$ is not prime~\cite{velleman}.
 \end{theorem}
 
+\begin{proof}
+    Direct Proof. Since $n$ is not prime, $\exists$$a$, $b$ $\in \Z$ such that $a$ $<$ $n$ and $b$ $<$ $n$ and $n$ $=$ $ab$. Let
+    \begin{align*}
+        x &= 2^b - 1
+    \end{align*}
+    and
+    \begin{align*}
+        y &= 1 + 2^b + 2^{2b} + ... + 2^{(a - 1)b}.
+    \end{align*}
+    Then, 
+    \begin{align}
+        xy &= (2^b - 1)(1 + 2^b + ... + 2^{(a - 1)b}) \\
+           &= 2^b(1 + 2^b + ... + 2^{(a - 1)b}) - (1 + 2^b + ... + 2^{(a - 1)b}) \\
+           &= 2^{ab} - 1 \\
+           &= 2^n - 1.
+    \end{align}
+\end{proof}
+
 
 
 
