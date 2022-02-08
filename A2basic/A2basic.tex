@@ -1,0 +1,166 @@
+%---------change this for every latex homework
+\def\yourid{mst3k}   % replace with your UVA computing ID
+\def\collabs{list collaborators' computing IDs}
+\def\sources{Cormen, et al, Introduction to Algorithms.  \emph{(add others here)}}
+% -----------------------------------------------------
+\def\duedate{Friday, February 18, 2022 at 11:30 pm }
+\def\duelocation{via Gradescope}
+\def\htype{Basic}
+\def\hunit{A}
+\def\hnumber{2}
+\def\course{{cs4102 - algorithms - spring 2022}}%------
+%-------------------------------------
+%-------------------------------------
+
+\documentclass[10pt]{article}
+\usepackage[colorlinks,urlcolor=blue]{hyperref}
+\usepackage[osf]{mathpazo}
+\usepackage{amsmath,amsfonts,graphicx}
+\usepackage{latexsym}
+\usepackage[top=1in,bottom=1.4in,left=1.25in,right=1.25in,centering,letterpaper]{geometry}
+\usepackage{color}
+\definecolor{mdb}{rgb}{0.1,0.6,0.4} 
+\definecolor{cit}{rgb}{0.05,0.2,0.45} 
+\pagestyle{myheadings}
+\markboth{\yourid}{\yourid}
+\usepackage{clrscode}
+
+\newenvironment{proof}{\par\noindent{\it Proof.}\hspace*{1em}}{$\Box$\bigskip}
+\newcommand{\handout}{
+   \renewcommand{\thepage}{Unit \hunit: \htype~Homework \hnumber~-~\arabic{page}}
+   \noindent
+   \begin{center}
+      \vbox{
+    \hbox to \columnwidth {\sc{\course} \hfill}
+    \vspace{-2mm}
+       \hbox to \columnwidth {\sc due \MakeLowercase{\duedate} \duelocation\hfill {\Huge\color{mdb}\hunit\hnumber{\Large\MakeLowercase{\htype}}(\yourid)}}
+      }
+   \end{center}
+   \vspace*{1mm}
+   \hrule
+   \vspace*{1mm}
+    {\footnotesize \textbf{Collaboration Policy:} You are encouraged to collaborate with up to 3 other students, but all work submitted must be your own {\em independently} written solution. List the computing ids of all of your collaborators in the \texttt{collabs} command at the top of the tex file. Do not share written notes, documents (including Google docs, Overleaf docs, discussion notes, PDFs), or code.  Do not seek published or online solutions for any assignments. If you use any published or online resources (which may not include solutions) when completing this assignment, be sure to cite by naming the book etc.\ or listing a website's URL. Do not submit a solution that you are unable to explain orally to a member of the course staff. Any solutions that share similar text/code will be considered in breach of this policy. Please refer to the syllabus for a complete description of the collaboration policy.
+   \vspace*{1mm}
+    \hrule
+    \vspace*{2mm}
+    \noindent
+    \textbf{Collaborators}: \collabs\\
+    \textbf{Sources}: \sources}
+    \vspace*{2mm}
+    \hrule
+    \vskip 2em
+}
+
+%\newcommand{\solution}[1]{\color{blue}\hfill\break\noindent\textbf{Solution:} #1\color{black}}
+%\newcommand{\altsolution}[1]{\color{blue}\hfill\break\noindent\textbf{Solution (Alternative):} #1\color{black}}
+
+\newcommand{\solution}[1]{}
+\newcommand{\altsolution}[1]{}
+
+\newcommand{\bit}[1]{\{0,1\}^{ #1 }}
+%\dontprintsemicolon
+%\linesnumbered
+\newtheorem{problem}{\sc\color{cit}problem}
+\newtheorem{practice}{\sc\color{cit}practice}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+
+\newcommand{\Z}{\mathbb{Z}} % This might be useful for Integers!
+
+\begin{document}
+\thispagestyle{empty}
+\handout
+
+%----Begin your modifications here
+
+
+%--- Problem 1 ------------------------------------------------------------------------------
+\begin{problem} Asymptotics \end{problem}
+
+    \begin{enumerate}   
+    	\item Write a mathematical statement using the appropriate order-class to express ``Algorithm A's worst-case $W(n)$  is quadratic.''
+    	
+    	\textbf{Solution:}  \emph{Add your solution like this below each question.}
+    	
+    	\item Write a mathematical statement using the appropriate order-class to express ``Algorithm A's time-complexity $T(n)$ is never worse than cubic for any input.''
+     
+        \item Write a statement using words and an appropriate order-class to express ``It's not possible for an algorithm that solves problem P to succeed unless it does at least a cubic number of operations.''
+ 
+     
+        \item Prove or disprove the following statement: 
+        $n (\log n)^2 \in O\left(n^{1.5}(\log n)\right)$.
+        
+        
+            
+    \end{enumerate}
+
+%--- Problem 2 ------------------------------------------------------------------------------
+\begin{problem} Basic Sorting \end{problem}
+    \begin{enumerate}   
+    	\item In a few sentences, explain if changing the comparison done in mergesort's \emph{merge()} function from $\leq$ to $<$ makes the sorting algorithm incorrect, and also whether it makes the sort unstable.
+    	
+    	\item Which of the following are true about insertion sort and mergesort?
+    		\begin{enumerate} 
+    		\item Insertion sort would run reasonably fast when the list is nearly in reverse-sorted order but with a few items out of order.
+    		\item For small inputs we would still expect mergesort to run more quickly that insertion sort.
+    		\item The lower-bounds argument that showed that sorts like insertion sort must be $\Omega(n^2)$ does not apply to mergesort because when a list item
+    		is moved in \emph{merge()} it may un-do more than one inversion.    
+    		\item We say the cost of ``dividing'' in mergesort is 1 because we must do a constant amount of work to find the midpoint of the subproblem we're sorting.
+		\end{enumerate} 
+    	
+    \end{enumerate}       	
+
+%--- Problem 3 ------------------------------------------------------------------------------
+\begin{problem} Recurrence Relations \end{problem}
+      \begin{enumerate}   
+    
+    	\item Reduce the following recurrence to its closed form (i.e.\ remove the recursive part of its defininiton) using the \emph{unrolling method.}
+    	$$T(n) = 3 T(n/3) + n \textrm{ and } T(1) = 1$$
+    	Be sure to show the general form of the recurrence in terms of how many times you've ``un-rolled'', as well as a formula for how many times you ``un-roll'' before getting to the base case.
+    
+    	\item Use the Master Theorem to find the order-class for this recurrence: $T(n) = 3 T (n/2) + n \log n$.  State which case applies, and if no case applies and the Master Theorem cannot be used, state that and explain why.
+
+    	\item Use the Master Theorem to find the order-class for this recurrence: $T(n) = 3 T (n/4) + n \log n$.  State which case applies, and if no case applies and the Master Theorem cannot be used, state that and explain why.
+    	
+    	\item Show you understand how to do a proof using the ``guess and check'' method and induction.   Show that the following recurrence $\in O(n \log_2 n)$:
+    	$$T(n) = 4 T(n/4) + n \textrm{ and } T(1) = 1$$ 
+    	You can assume $n$ is a power of 4.
+    	
+    	\emph{Hints:} For the induction, you have to prove the relationship for a small value of $n$.  You'll find $n=1$ doesn't work, but you can show it holds for the
+    	next larger value of $n$.  (Again, assume $n$ is a power of 4.) It's OK for the induction proof if the relationship holds for some small value of $n$ even
+    	if it doesn't hold for $n=1$.\\
+    	Also, you'll need to guess a value for $c$. For this problem, the value of $c$ is not anything strange or unusual.  A small value will work, you will find it easiest to just keep $c$ in your math calculations and when you get to the final step you can see what value of $c$ makes your relationship true. 
+    	(This problem is much easier than the example we did in class!) 
+    	
+      \end{enumerate}   
+
+%--- Problem 4 ------------------------------------------------------------------------------
+ \begin{problem} Divide and Conquer \#1\end{problem}
+    
+\noindent
+Write pseudo-code that implements a divide and conquer algorithm for the following problem.  Given a list $L$ of size $n$,  find values of the largest and second largest items in the list.  (Assume that $L$ contains unique values.)
+	
+	In your pseudo-code,  you can indicate that a pair of values is returned by a function using Python-like syntax, if you wish.  For example,  a function $funky()$ that had this return statement:\\
+	\hspace*{3em}{\tt return a, b} \\
+	would could be used to assign $a$ to $x$ and $b$ to $y$ if called this way: \\
+	\hspace*{3em}{\tt (x, y) = funky()}
+	
+%--- Problem 5 ------------------------------------------------------------------------------
+ \begin{problem} Divide and Conquer \#2\end{problem}
+
+\noindent
+\textbf{Conference Superstar.}  There is a CS conference with $n$ attendees. One attendee is a ``superstar'' --- she is new to the field and has written the top paper at the conference.  She is the attendee whom all other attendees know, yet she knows no other attendee.  Specifically, if attendee $a_i$ is the superstar, then $\forall a_j \neq a_i$, $knows(a_j, a_i) == true$ and $knows(a_i, a_j) == false$.  Other attendees may or may not know each other, as is true for ``normal'' meetings.  Give a $O(n)$ algorithm which determines who the superstar is.
+
+\emph{Hint:} Compare pairs of attendees and try to eliminate one of them. Then you might  want to do a swap for each comparison to make sure all attendees that have a certain property are together in one part of your list so you can recurse on just those.      
+      
+
+\begin{problem} Gradescope Submission \end{problem}
+Submit a version of this \verb|.tex| file to Gradescope with your solutions added.  You should only submit your \verb|.pdf| and \verb|.tex| files.
+
+% Bibliography
+%\bibliographystyle{plain}
+%\bibliography{bibliography}
+
+\end{document}
+
