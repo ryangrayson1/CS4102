@@ -1,7 +1,7 @@
 %---------change this for every latex homework
-\def\yourid{mst3k}   % replace with your UVA computing ID
-\def\collabs{list collaborators' computing IDs}
-\def\sources{Cormen, et al, Introduction to Algorithms.  \emph{(add others here)}}
+\def\yourid{rtg5xkh}   % replace with your UVA computing ID
+\def\collabs{ra9ha}
+\def\sources{Cormen, et al, Introduction to Algorithms.}
 % -----------------------------------------------------
 \def\duedate{Friday, February 18, 2022 at 11:30 pm }
 \def\duelocation{via Gradescope}
@@ -81,35 +81,71 @@
     \begin{enumerate}   
     	\item Write a mathematical statement using the appropriate order-class to express ``Algorithm A's worst-case $W(n)$  is quadratic.''
     	
-    	\textbf{Solution:}  \emph{Add your solution like this below each question.}
+    	\textbf{Solution:}  \emph{$W(n) \in \mathcal{O}(n^{2})$}
     	
     	\item Write a mathematical statement using the appropriate order-class to express ``Algorithm A's time-complexity $T(n)$ is never worse than cubic for any input.''
+    	
+    	\textbf{Solution:}  \emph{$T(n) \in \mathcal{O}(n^{3})$}
      
         \item Write a statement using words and an appropriate order-class to express ``It's not possible for an algorithm that solves problem P to succeed unless it does at least a cubic number of operations.''
  
+        \textbf{Solution:}  \emph{A solves P and A's time complexity is given by $T(n)$. $T(n) \in \Omega (n^{3})$}
      
         \item Prove or disprove the following statement: 
         $n (\log n)^2 \in O\left(n^{1.5}(\log n)\right)$.
         
+        \textbf{Solution:}
+        \begin{proof}
+            Let $c = 1, n_{0} = 1$. \\
+            Then, $n_{0}(\log{n_{0}})^{2} = (1)(log1)^{2} = 0$, \\
+            $c(n_{0}^{1.5}(\log{n_{0}})) = (1)(\log{1}) = 0$ \\
+            $0 \leq 0$. \\
+            The proposition $n(\log{n})^{2} \leq n^{1.5}(\log{n})$ can be simplified as follows:
+            \begin{align*}
+                n(\log{n})(\log{n}) &\leq n^{1.5}(\log{n}) \\
+                \log{n} &\leq \sqrt{n}
+            \end{align*}
+            $\forall{n} \geq 1, \log{n} < \sqrt{n} \implies n(\log{n})^{2} \leq n^{1.5}(\log{n})$. \\
+            Thus, $n (\log n)^2 \in O\left(n^{1.5}(\log n)\right)$.
+        \end{proof}
+        
         
             
     \end{enumerate}
+    
+    \pagebreak
 
 %--- Problem 2 ------------------------------------------------------------------------------
 \begin{problem} Basic Sorting \end{problem}
     \begin{enumerate}   
     	\item In a few sentences, explain if changing the comparison done in mergesort's \emph{merge()} function from $\leq$ to $<$ makes the sorting algorithm incorrect, and also whether it makes the sort unstable.
     	
+    	\textbf{Solution:}  \emph{No, changing this comparison would not make the merge sort algorithm incorrect. The comparison would still correctly identify when the current element in the left subarray was less than that in the right and place it in the sorted array accordingly. However, this change would make the merge sort algorithm unstable, meaning that elements with the same value in the original array could be placed in a different order than they appeared in the original array. This is because by changing the $\leq$ to a $<$ would make it so that, in case when the current element of the left and right subarray are equal, the if statement containing the $<$ would not execute, so the else statement would execute and the element in the right subarray would be added to the new array next. This would swap the order in which the two equal elements originally appeared.}
+    	
     	\item Which of the following are true about insertion sort and mergesort?
     		\begin{enumerate} 
     		\item Insertion sort would run reasonably fast when the list is nearly in reverse-sorted order but with a few items out of order.
+    		
+    		\textbf{Solution:} \emph{False}
+    		
     		\item For small inputs we would still expect mergesort to run more quickly that insertion sort.
+    		
+    		\textbf{Solution:} \emph{False. We would expect insertion sort to be faster than merge sort for small inputs because the overhead of dividing the data and merging it is proportionally large for these small inputs which will cause merge sort to run relatively slowly.}
+    		
     		\item The lower-bounds argument that showed that sorts like insertion sort must be $\Omega(n^2)$ does not apply to mergesort because when a list item
     		is moved in \emph{merge()} it may un-do more than one inversion.    
+    		
+    		\textbf{Solution:} \emph{True}
+    		
     		\item We say the cost of ``dividing'' in mergesort is 1 because we must do a constant amount of work to find the midpoint of the subproblem we're sorting.
+    		
+    		\textbf{Solution:} \emph{True. The cost of dividing for mergesort is constant because the algorithm doesn't do any actual work (i.e. comparisons) in the divide stage.}
+    		
 		\end{enumerate} 
     	
-    \end{enumerate}       	
+    \end{enumerate}    
+    
+    \pagebreak
 
 %--- Problem 3 ------------------------------------------------------------------------------
 \begin{problem} Recurrence Relations \end{problem}
@@ -118,10 +154,61 @@
     	\item Reduce the following recurrence to its closed form (i.e.\ remove the recursive part of its defininiton) using the \emph{unrolling method.}
     	$$T(n) = 3 T(n/3) + n \textrm{ and } T(1) = 1$$
     	Be sure to show the general form of the recurrence in terms of how many times you've ``un-rolled'', as well as a formula for how many times you ``un-roll'' before getting to the base case.
+    	
+    	\textbf{Solution:}
+    	
+    	\begin{align*}
+    	    T(n) &= 3\left( 3T\left(\frac{n}{9}\right) + \frac{n}{3} \right) + n \\
+    	         &= 9T\left(\frac{n}{9}\right) + 2n \\
+    	    T(n) &= 9\left(3T\left(\frac{n}{27}\right) + \frac{n}{9}\right)+ 2n \\
+    	         &= 27T\left(\frac{n}{27}\right) + 3n \\
+    	\end{align*}
+    	General Case: let i = 1 for the original recurrence relation, i = 2 for the first unroll, i = 3 for the second and so on. Then, the equation can be expressed in terms of i for i unrolls: 
+    	\begin{align*}
+    	    3^{i}T\left(\frac{n}{3^{i}}\right) + i(n)
+    	\end{align*}
+    	To reach the base case, we must find i and n such that $n = 3^{i}$. Rearranging, we get $i = \log_3{n}$.
+    	We can plug this into the general case relation to get:
+    	\begin{align*}
+    	    T(n) &= 3^{\log_3{n}}T\left(\frac{n}{3^{\log_3{n}}}\right) + \log_3{n}(n) \\
+    	    &= nT(1) + n\log_3{n} \\
+    	    &= n + n\log_3{n}
+    	\end{align*}
+    	Thus, $T(n) \in \Theta(n\log{n})$.
     
     	\item Use the Master Theorem to find the order-class for this recurrence: $T(n) = 3 T (n/2) + n \log n$.  State which case applies, and if no case applies and the Master Theorem cannot be used, state that and explain why.
-
+    	
+    	\textbf{Solution:}
+    	\emph{
+    	Using the master theorem format, we get:
+    	\begin{align*}
+    	    a = 2, b = 3, f(n) = n \log n. \\
+    	    log_2{3} = 1.585. \\
+    	    n\log{n} \in \mathcal{O}(n^{1.5})
+    	\end{align*}
+    	(we used $\varepsilon \approx .085$) \\
+    	Thus, the first case of the master theorem applies. \\
+    	Conclusion: $T(n) \in \Theta(n^{1.585})$
+        }
+        \pagebreak
+        
     	\item Use the Master Theorem to find the order-class for this recurrence: $T(n) = 3 T (n/4) + n \log n$.  State which case applies, and if no case applies and the Master Theorem cannot be used, state that and explain why.
+    	
+    	\textbf{Solution:} 
+    	\emph{
+    	Using the master theorem format, we get:
+    	\begin{align*}
+    	    a = 4, b = 3, f(n) = n \log n. \\
+    	    log_4{3} = 0.792. \\
+    	    n\log{n} \in \Omega(n)
+    	 \end{align*}
+    	 (we used $\varepsilon \approx .2$ for the constant to make things simple) \\
+    	 Thus, the first condition of case 3 of the master theorem applies. \\ 
+    	 The regularity condition is also true in this case because $2f\left(\frac{n}{b}\right) \leq cf(n)$ for a constant $c = .9$ and all sufficiently large $n$. \\
+    	 Thus, $T(n) \in \Theta(n\log{n})$.
+    	}
+    	
+    	\pagebreak
     	
     	\item Show you understand how to do a proof using the ``guess and check'' method and induction.   Show that the following recurrence $\in O(n \log_2 n)$:
     	$$T(n) = 4 T(n/4) + n \textrm{ and } T(1) = 1$$ 
@@ -133,7 +220,31 @@
     	Also, you'll need to guess a value for $c$. For this problem, the value of $c$ is not anything strange or unusual.  A small value will work, you will find it easiest to just keep $c$ in your math calculations and when you get to the final step you can see what value of $c$ makes your relationship true. 
     	(This problem is much easier than the example we did in class!) 
     	
+    	\textbf{Solution:}
+    	
+    	Goal: $T(n) \leq cn\log_2{n} \in \mathcal{O}(n\log{n})$ \\ \\
+    	Base Cases: $T(4) = 8 \leq cn\log_2{n} = 8c$, \\
+    	\null \qquad \qquad \quad $T(16) = 36 \leq cn\log_2{n} = 64c$\\ \\
+    	Hypothesis: $\forall n \leq n_0$, $T(n) \leq cnlog_2{n}$. \\ \\
+    	Show $T(4n_0) \leq c(4n_0)\log_2{(4n_0)}$: \\ \\
+    	\begin{align*}
+    	    T(4n_0) &= 4T(\frac{4n_0}{4}) + 4n_0 \\
+    	    &\leq 4\left(c(n_0)log_2{(n_0)}\right) + 4n_0 \\
+    	    &= 4cn_0log_2{(n_0)} + 4n_0 \\
+    	\end{align*}
+        Then, 
+    	\begin{align*}
+    	    4cn_0log_2{(n_0)} + 4n_0 &\leq c(4n_0)\log_2{(4n_0)} \\
+    	    cn_0log_2(n_0) + n_0 &\leq cn_0\log_2{(4n_0)} \\
+    	    clog_2(n_0) + 1 &\leq c\log_2{(4n_0)}
+    	\end{align*}
+    	Let c = 2. The base cases hold with this c. \\
+    	And, it is clear that $2log_2(n_0) + 1 \leq 2\log_2{(4n_0)}$ for all sufficiently large $n$ because the 1 on the left side will become insignificant and the $\log(4n_0)$ on the right will always exceed the $\log(n_0)$ on the left.
+    	Therefore $T(n) \in \mathcal{O}(n\log{n})$.
       \end{enumerate}   
+      
+      
+\pagebreak
 
 %--- Problem 4 ------------------------------------------------------------------------------
  \begin{problem} Divide and Conquer \#1\end{problem}
@@ -141,10 +252,37 @@
 \noindent
 Write pseudo-code that implements a divide and conquer algorithm for the following problem.  Given a list $L$ of size $n$,  find values of the largest and second largest items in the list.  (Assume that $L$ contains unique values.)
 	
-	In your pseudo-code,  you can indicate that a pair of values is returned by a function using Python-like syntax, if you wish.  For example,  a function $funky()$ that had this return statement:\\
+	In your pseudo-code,  you can indicate that a pair of values is returned by a function using Python-like syntax, if you wish.  For example,  a function $funky()$ that had this return statement: \\
 	\hspace*{3em}{\tt return a, b} \\
 	would could be used to assign $a$ to $x$ and $b$ to $y$ if called this way: \\
-	\hspace*{3em}{\tt (x, y) = funky()}
+	\hspace*{3em}{\tt (x, y) = funky()} \\
+	
+\textbf{Solution:} \\
+\#assume $0$ is passed into start and $n - 1$ into end \\
+\#assume length of list is $>= 2$ \\ \\
+function largest2(L, start, end): \\ \\
+if start - end == 1: \\
+\null \quad if L[start] $>$ L[end]: \\
+\null \quad \null \quad return [L[start], L[end]] \\
+\null \quad else: \\
+\null \quad \null \quad return [L[end], L[start]] \\ \\
+mid = (start + end) // 2; \\ \\
+if start == end: \\
+\null \quad return [L[start], INT.MINVALUE] \\ \\
+largest2r = largest2[L, mid + 1, end] \\
+largest2l = largest2[L, start, mid] \\ \\
+if largest2r[0] $>$ largest2l[0]: \\
+\null \quad if largest2r[1] $>$ largest21[0]: \\
+\null \quad \null \quad return [largest2r[0], largest2r[1]] \\
+\null \quad else:\\
+\null \quad \null \quad return [largest2r[0], largest2l[0]] \\
+else: \\
+\null \quad if largest2l[1] $>$ largest2r[0]: \\
+\null \quad \null \quad return [largest21[0], largest21[1]] \\ 
+\null \quad else:\\
+\null \quad \null \quad return [largest21[0], largest2r[0]] 
+        
+\pagebreak
 	
 %--- Problem 5 ------------------------------------------------------------------------------
  \begin{problem} Divide and Conquer \#2\end{problem}
@@ -152,9 +290,12 @@ Write pseudo-code that implements a divide and conquer algorithm for the followi
 \noindent
 \textbf{Conference Superstar.}  There is a CS conference with $n$ attendees. One attendee is a ``superstar'' --- she is new to the field and has written the top paper at the conference.  She is the attendee whom all other attendees know, yet she knows no other attendee.  Specifically, if attendee $a_i$ is the superstar, then $\forall a_j \neq a_i$, $knows(a_j, a_i) == true$ and $knows(a_i, a_j) == false$.  Other attendees may or may not know each other, as is true for ``normal'' meetings.  Give a $O(n)$ algorithm which determines who the superstar is.
 
-\emph{Hint:} Compare pairs of attendees and try to eliminate one of them. Then you might  want to do a swap for each comparison to make sure all attendees that have a certain property are together in one part of your list so you can recurse on just those.      
-      
-
+\emph{Hint:} Compare pairs of attendees and try to eliminate one of them. Then you might  want to do a swap for each comparison to make sure all attendees that have a certain property are together in one part of your list so you can recurse on just those. \\ \\
+\textbf{Solution:}
+We will implement a recursive algorithm \\ \\
+Base case: 1 attendee left in the list, this attendee is the superstar \\ \\
+Recursive case: split list into 2 halves, and pair up the first attendee in the first half of the list to the first attendee in the second half of the list and so on (for example, in a 4 person list indices 0 and 2 would be paired up, and indices, 1 and 3 would be paired). For an odd number of attendees, we will have one extra attendee in the first "half" of the list and will pair the rest as usual. For each pair of attendees $a$ and $b$, if $a$ knows $b$ and $b$ doesn't know $a$, swap their positions in the list. If there is an odd number of attendees, one attendee will not be paired and we will do nothing and leave them in the first half of the list. After iterating through once with this swapping process, potential candidates for the superstar will all be in the first half of the list. We will then clear all attendees in the second half of the list and repeat the process with the resulting list. \\ \\
+Time complexity: In this algorithm, we do 2 comparisons on each pair and split the list into 2 until there is only one attendee left. Thus, the time complexity for an $n$-attendee list can be given as $T(n) = T\left(\frac{n}{2}\right) + n$. Using the master theorem, $a = 1, b = 2, f(n) = n$. $n^{\log_b{a}} = n^{0} = 1$. Case 3 applies, so $T(n) \in \mathcal{O}(n)$.
 \begin{problem} Gradescope Submission \end{problem}
 Submit a version of this \verb|.tex| file to Gradescope with your solutions added.  You should only submit your \verb|.pdf| and \verb|.tex| files.
 
@@ -163,4 +304,5 @@ Submit a version of this \verb|.tex| file to Gradescope with your solutions adde
 %\bibliography{bibliography}
 
 \end{document}
+
 
