@@ -223,23 +223,23 @@
     	\textbf{Solution:}
     	
     	Goal: $T(n) \leq cn\log_2{n} \in \mathcal{O}(n\log{n})$ \\ \\
-    	Base Cases: $T(4) = 8 \leq cn\log_2{n} = 8c$, \\
-    	\null \qquad \qquad \quad $T(16) = 36 \leq cn\log_2{n} = 64c$\\ \\
+    	Base Case: $T(4) = 8 \leq cn\log_2{n} = 8c$, \\
+    	Holds for any $c \geq 1$. \\ \\
     	Hypothesis: $\forall n \leq n_0$, $T(n) \leq cnlog_2{n}$. \\ \\
-    	Show $T(4n_0) \leq c(4n_0)\log_2{(4n_0)}$: \\ \\
+    	Show $T(n_0 + 1) \leq c(n_0 + 1)\log_2{(n_0 + 1)}$: \\ \\
     	\begin{align*}
-    	    T(4n_0) &= 4T(\frac{4n_0}{4}) + 4n_0 \\
-    	    &\leq 4\left(c(n_0)log_2{(n_0)}\right) + 4n_0 \\
-    	    &= 4cn_0log_2{(n_0)} + 4n_0 \\
+    	    T(n_0 + 1) &= 4T(\frac{n_0 + 1}{4}) + n_0 + 1 \\
+    	    &\leq 4\left(c(\frac{n_0 + 1}{4})log_2{(\frac{n_0 + 1}{4}})\right) + n_0 + 1 \\
+    	    &= c(n_0 + 1)log_2{(\frac{n_0 + 1}{4}}) + n_0 + 1 \\
+    	    &= c(n_0 + 1)\left(\log_2(n_0 + 1) - \log_2(4)\right) + n_0 + 1 \\
+    	    &= c(n_0 + 1)\left(\log_2(n_0 + 1) - 2\right) + n_0 + 1 \\
+    	    &= c(n_0 + 1)\left(\log_2(n_0 + 1)\right) - 2c(n_0 + 1) + n_0 + 1
     	\end{align*}
-        Then, 
+        Now, if we choose $c = 1/2$ and plug it into the above equation, we find that: 
     	\begin{align*}
-    	    4cn_0log_2{(n_0)} + 4n_0 &\leq c(4n_0)\log_2{(4n_0)} \\
-    	    cn_0log_2(n_0) + n_0 &\leq cn_0\log_2{(4n_0)} \\
-    	    clog_2(n_0) + 1 &\leq c\log_2{(4n_0)}
+    	    T(n_0 + 1) = c(n_0 + 1)\log_2{(n_0 + 1)}
     	\end{align*}
-    	Let c = 2. The base cases hold with this c. \\
-    	And, it is clear that $2log_2(n_0) + 1 \leq 2\log_2{(4n_0)}$ for all sufficiently large $n$ because the 1 on the left side will become insignificant and the $\log(4n_0)$ on the right will always exceed the $\log(n_0)$ on the left.
+    	Thus the goal holds. \\
     	Therefore $T(n) \in \mathcal{O}(n\log{n})$.
       \end{enumerate}   
       
