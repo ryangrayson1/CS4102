@@ -182,7 +182,7 @@
     	\emph{
     	Using the master theorem format, we get:
     	\begin{align*}
-    	    a = 2, b = 3, f(n) = n \log n. \\
+    	    a = 3, b = 2, f(n) = n \log n. \\
     	    log_2{3} = 1.585. \\
     	    n\log{n} \in \mathcal{O}(n^{1.5})
     	\end{align*}
@@ -198,14 +198,21 @@
     	\emph{
     	Using the master theorem format, we get:
     	\begin{align*}
-    	    a = 4, b = 3, f(n) = n \log n. \\
-    	    log_4{3} = 0.792. \\
+    	    a = 3, b = 4, f(n) = n \log n. \\
+    	    log_4{3} = .79. \\
     	    n\log{n} \in \Omega(n)
     	 \end{align*}
-    	 (we used $\varepsilon \approx .2$ for the constant to make things simple) \\
-    	 Thus, the first condition of case 3 of the master theorem applies. \\ 
-    	 The regularity condition is also true in this case because $2f\left(\frac{n}{b}\right) \leq cf(n)$ for a constant $c = .9$ and all sufficiently large $n$. \\
-    	 Thus, $T(n) \in \Theta(n\log{n})$.
+    	 (we used $\varepsilon \approx .21$ for the constant to make things simple) \\
+    	 Thus, the third case of the master theorem applies. \\
+    	 The first condition is true, we just need to check the regularity condition. \\
+    	 Show $af(\frac{n}{b}) \leq cf(n)$ for some constant $c$: \\
+    	 \begin{align*}
+        	 3(\frac{n}{4})log(\frac{n}{4}) &\leq cnlogn \\
+        	 \frac{3n}{4}(logn - log4) &\leq clogn \\
+        	 \frac{3}{4}(nlogn) -6n/4 &\leq cnlogn
+        \end{align*}
+        Thus, we can choose $c = .75$, which will make the $nlogn$ terms on each side equal so they will cancel out. And since the $-6n/4$ is negative, the left side will always be smaller. So the regularity condition holds. \\
+        Therefore, $T(n) \in \Theta(nlogn)$ 
     	}
     	
     	\pagebreak
