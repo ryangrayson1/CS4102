@@ -32,21 +32,18 @@ class ClosestPair:
     # @return the distances between the closest pair and second closest pair
     # with closest at position 0 and second at position 1 
     def compute(self, file_data): 
-        srtd = self.to_sorted_list(file_data)
-        if len(srtd) == 0 or len(srtd) == 1:
-            return -1
-        self.closest2(srtd)
+        print("closest single distance: " + str(self.closest2(file_data)))
         return self.mins
 
     #accepts the list of strings and returns a list of coordinate lists: [x, y] sorted by x coordinate
-    def to_sorted_list(self, data):
+    def to_sorted_list(self, data, xy):
         points = []
         for line in data:
             x, y = line.split()
             x = float(x)
             y = float(y)
             points.append([x, y])
-        points = sorted(points, key=lambda k: [k[0]])
+        points = sorted(points, key=lambda k: [k[xy]])
         return points
 
     def distance(self, a, b): #expects 2 lists of an x and y coord
@@ -59,9 +56,13 @@ class ClosestPair:
         return min_dist
 
     def closest2(self, points):
-        return self.recurse(points)
+        srtdx = self.to_sorted_list(points, 0)
+        srtdy = self.to_sorted_list(points, 1)
+        if len(srtdx) == 0 or len(srtdx) == 1:
+            return -1
+        return self.recurse(srtdx, srtdy)
 
-    def recurse(self, points):
+    def recurse(self, points, y_sorted):
 
         #Base cases:
 
@@ -74,21 +75,49 @@ class ClosestPair:
             return self.edgecase3(points)
 
         #Recursive case:
+        mid = len(points) // 2 #midpoint for our split
 
-        mid = len(points) // 2
+        leftysort = []
+        rightysort = []
+        for i in range(len(points)): #divide the y lists in O(n)
+            if y_sorted[i][0] < points[mid][0]:
+                leftysort.append(y_sorted[i])
+            else:
+                rightysort.append(y_sorted[i])
 
-        min_left = self.recurse(points[:mid])
+        min_left = self.recurse(points[:mid], leftysort)
         
-        min_right = self.recurse(points[mid:])
+        min_right = self.recurse(points[mid:], rightysort)
 
         current_min = min(min_left, min_right)
+        
+        final_min = min(current_min, self.checkrunway(points, current_min, y_sorted, points[mid][0]))
 
-        #final_min = self.checkrunway(points, current_min)
+        return final_min
 
-        return current_min
+    def checkrunway(self, points, closest_dist, y_sorted, cut): #closest dist will be width of runway
+        runwaypts = []
 
-    def checkrunway(self, points, closest_dist): #closest dist will be width of runway
-        return "UNFINISHED"
+        for i in range(len(y_sorted)):
+            if y_sorted[i][0] >= cut - closest_dist and y_sorted[i][0] <= cut + closest_dist:
+                runwaypts.append(y_sorted[i])
+        
+        runway_min = self.distance(runwaypts[0], runwaypts[1])
+        rx1 = runwaypts[0][0]
+        rx2 = runwaypts[1][0]
+        for i in range(len(runwaypts)):
+
+            for j in range( i + 1, min(i + 8, len(runwaypts))):
+                dst = self.distance(runwaypts[i], runwaypts[j]) 
+                if dst < runway_min:
+                    runway_min = dst
+                    rx1 = runwaypts[i][0]
+                    rx2 = runwaypts[j][0]
+        
+        if (rx1 < cut and rx2 >= cut) or (rx1 >= cut and rx2 < cut): # this would mean that this pair was not originally accounted for by the d & c
+            self.checkmins(runway_min)
+
+        return runway_min
     
     def checkmins(self, newdist): 
         if len(self.mins) == 0:
