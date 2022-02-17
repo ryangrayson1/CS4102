@@ -1,6 +1,6 @@
 import sys
 import time
-from ClosestPair import ClosestPair
+from no_runway import ClosestPair
 
 fp = open("test3.txt", 'r')
 lines = fp.readlines()
