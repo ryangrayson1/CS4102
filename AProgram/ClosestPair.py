@@ -113,7 +113,7 @@ class ClosestPair:
 
                     if dst < runway_min:
                         runway_min = dst
-                    #now need to add this dist only if we havent seen it before
+                    #now need to add this dist only if we havent seen it before, that's what the if below checks
                     ix = runwaypts[i][0]
                     iy = runwaypts[i][1]
                     jx = runwaypts[j][0]
