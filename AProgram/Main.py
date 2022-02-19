@@ -2,7 +2,7 @@ import sys
 import time
 from ClosestPair import ClosestPair
 
-fp = open("test.pdf", 'r')
+fp = open("test1.txt", 'r')
 lines = fp.readlines()
 points = []
 for line in lines:

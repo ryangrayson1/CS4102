@@ -22,7 +22,7 @@ class ClosestPair:
     def __init__(self):
         return
 
-    mins = []
+    mins = [] # store the closest 2 pairs
     # This is the method that should set off the computation
     # of closest pair.  It takes as input a list containing lines of input
     # as strings.  You should parse that input and then call a
@@ -53,10 +53,23 @@ class ClosestPair:
         return ( ((b[0] - a[0])**2) + ((b[1] - a[1])**2) )**0.5
 
     def edgecase3(self, pts): # case when there are 3 left in the list, simply use brute force
-        min_dist = self.distance(pts[0], pts[1])
-        min_dist = min(min_dist, self.distance(pts[0], pts[2]))
-        min_dist = min(min_dist, self.distance(pts[1], pts[2]))
-        return min_dist
+        d1 = self.distance(pts[0], pts[1])
+        d2 = self.distance(pts[0], pts[2])
+        d3 = self.distance(pts[1], pts[2])
+        min_dists = [d1, 0]
+        if d2 < d1:
+            min_dists[0] = d2
+            min_dists[1] = d1
+        else:
+            min_dists[1] = d2
+
+        if d3 < min_dists[0]:
+            min_dists[1] = min_dists[0]
+            min_dists[0] = d3
+        elif d3 < min_dists[1]:
+            min_dists[1] = d3
+
+        return min_dists
 
     def closest2(self, points):
         srtdx = self.to_sorted_list(points, 0)
@@ -71,8 +84,9 @@ class ClosestPair:
             return self.distance(points[0], points[1])
 
         if len(points) == 3:
-            self.checkmins(self.edgecase3(points))
-            return self.edgecase3(points)
+            self.checkmins(self.edgecase3(points)[0])
+            self.checkmins(self.edgecase3(points)[1])
+            return self.edgecase3(points)[0]
 
         #Recursive case:
         mid = len(points) // 2 #midpoint for our split
@@ -105,7 +119,7 @@ class ClosestPair:
                 runwaypts.append(y_sorted[i])
         
         if len(runwaypts) >= 2:
-            runway_min = 2100000000
+            runway_min = self.distance(runwaypts[0], runwaypts[1])
 
             for i in range(len(runwaypts)):
                 for j in range(i + 1, min(i + 8, len(runwaypts))):
@@ -113,12 +127,12 @@ class ClosestPair:
 
                     if dst < runway_min:
                         runway_min = dst
-                    #now need to add this dist only if we havent seen it before, that's what the if below checks
+
                     ix = runwaypts[i][0]
                     iy = runwaypts[i][1]
                     jx = runwaypts[j][0]
                     jy = runwaypts[j][1]
-
+                    #if a runway pair is on opp sides of the cut, we have not seen this pair before so check it.
                     if (ix < cut and jx >= cut) or (ix >= cut and jx < cut) or ((ix == cut and jx == cut) and ((iy < midy and jy >= midy) or (iy >= midy and jy < midy))):
                         self.checkmins(dst)
 
@@ -132,12 +146,14 @@ class ClosestPair:
 
         elif len(self.mins) == 1:
             if newdist < self.mins[0]:
-                self.minsmins = [newdist, self.mins[0]]
+                self.mins.append(self.mins[0])
+                self.mins[0] = newdist
             else:
                 self.mins.append(newdist)
 
         elif newdist < self.mins[0]:
-            self.mins = [newdist, self.mins[0]]
+            self.mins[1] = self.mins[0]
+            self.mins[0] = newdist
 
         elif newdist < self.mins[1]:
             self.mins[1] = newdist
