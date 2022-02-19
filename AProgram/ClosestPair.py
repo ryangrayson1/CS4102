@@ -32,7 +32,7 @@ class ClosestPair:
     # @return the distances between the closest pair and second closest pair
     # with closest at position 0 and second at position 1 
     def compute(self, file_data): 
-        print("closest single distance: " + str(self.closest2(file_data)))
+        self.closest2(file_data)
         return self.mins
 
     #accepts the list of strings and returns a list of coordinate lists: [x, y] sorted by x coordinate
@@ -43,7 +43,10 @@ class ClosestPair:
             x = float(x)
             y = float(y)
             points.append([x, y])
-        points = sorted(points, key=lambda k: [k[xy]])
+        if xy == 1:
+            points = sorted(points, key=lambda k: k[1])
+        else:
+            points = sorted(points, key=lambda k: [k[0], k[1]])
         return points
 
     def distance(self, a, b): #expects 2 lists of an x and y coord
@@ -58,14 +61,11 @@ class ClosestPair:
     def closest2(self, points):
         srtdx = self.to_sorted_list(points, 0)
         srtdy = self.to_sorted_list(points, 1)
-        if len(srtdx) == 0 or len(srtdx) == 1:
-            return -1
         return self.recurse(srtdx, srtdy)
 
     def recurse(self, points, y_sorted):
 
         #Base cases:
-
         if len(points) == 2:
             self.checkmins(self.distance(points[0], points[1]))
             return self.distance(points[0], points[1])
@@ -80,7 +80,7 @@ class ClosestPair:
         leftysort = []
         rightysort = []
         for i in range(len(points)): #divide the y lists in O(n)
-            if y_sorted[i][0] < points[mid][0]:
+            if y_sorted[i][0] < points[mid][0] or (y_sorted[i][0] == points[mid][0] and y_sorted[i][1] < points[mid][1] and len(leftysort) < mid):
                 leftysort.append(y_sorted[i])
             else:
                 rightysort.append(y_sorted[i])
@@ -102,22 +102,40 @@ class ClosestPair:
             if y_sorted[i][0] >= cut - closest_dist and y_sorted[i][0] <= cut + closest_dist:
                 runwaypts.append(y_sorted[i])
         
-        runway_min = self.distance(runwaypts[0], runwaypts[1])
-        rx1 = runwaypts[0][0]
-        rx2 = runwaypts[1][0]
-        for i in range(len(runwaypts)):
+        if len(runwaypts) >= 2:
+            runway_mins = [2100000000, 2100000000]
+            rx1 = 2100000000
+            rx2 = 2100000000
+            r2x1 = 2100000000
+            r2x2 = 2100000000
 
-            for j in range( i + 1, min(i + 8, len(runwaypts))):
-                dst = self.distance(runwaypts[i], runwaypts[j]) 
-                if dst < runway_min:
-                    runway_min = dst
-                    rx1 = runwaypts[i][0]
-                    rx2 = runwaypts[j][0]
-        
-        if (rx1 < cut and rx2 >= cut) or (rx1 >= cut and rx2 < cut): # this would mean that this pair was not originally accounted for by the d & c
-            self.checkmins(runway_min)
+            for i in range(len(runwaypts)):
+                for j in range( i + 1, min(i + 8, len(runwaypts))):
+                    dst = self.distance(runwaypts[i], runwaypts[j]) 
+                    res = self.checkmins2(dst, runway_mins)
 
-        return runway_min
+                    if res[1] == 1:
+                        rx1 = runwaypts[i][0]
+                        rx2 = runwaypts[j][0]
+                    elif res[1] == 2:
+                        r2x1 = runwaypts[i][0]
+                        r2x2 = runwaypts[j][0]
+                    elif res[1] == 12:
+                        r2x1 = rx1
+                        r2x2 = rx2
+                        rx1 = runwaypts[i][0]
+                        rx2 = runwaypts[j][0]
+
+                    runway_mins = res[0]
+
+            if (rx1 < cut and rx2 >= cut) or (rx1 >= cut and rx2 < cut): # this would mean that this pair was not originally accounted for by the d & c
+                self.checkmins(runway_mins[0])
+            if (r2x1 < cut and r2x2 >= cut) or (r2x1 >= cut and r2x2 < cut):
+                self.checkmins(runway_mins[1])
+
+            return runway_mins[0]
+        else:
+            return closest_dist
     
     def checkmins(self, newdist): 
         if len(self.mins) == 0:
@@ -135,4 +153,26 @@ class ClosestPair:
         elif newdist < self.mins[1]:
             self.mins[1] = newdist
 
-        return self.mins
+    def checkmins2(self, newdist, the_mins): 
+        x = 0 #no change of mins
+        if len(the_mins) == 0:
+            the_mins.append(newdist)
+            x = 1 #first val
+
+        elif len(the_mins) == 1:
+            if newdist < the_mins[0]:
+                the_mins = [newdist,the_mins[0]]
+                x = 12 # first val and second val moved
+            else:
+                the_mins.append(newdist)
+                x = 2 #just 2nd val moved
+
+        elif newdist < the_mins[0]:
+            the_mins = [newdist, the_mins[0]]
+            x = 12 #both
+
+        elif newdist < the_mins[1]:
+            the_mins[1] = newdist
+            x = 2 #just 2nd
+
+        return [the_mins, x]
