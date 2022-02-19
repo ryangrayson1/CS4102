@@ -91,49 +91,38 @@ class ClosestPair:
 
         current_min = min(min_left, min_right)
         
-        final_min = min(current_min, self.checkrunway(current_min, y_sorted, points[mid][0]))
+        final_min = min(current_min, self.checkrunway(current_min, y_sorted, points[mid]))
 
         return final_min
 
-    def checkrunway(self, closest_dist, y_sorted, cut): #closest dist will be width of runway
+    def checkrunway(self, closest_dist, y_sorted, midpt): #closest dist will be width of runway
         runwaypts = []
+        cut = midpt[0]
+        midy = midpt[1]
 
         for i in range(len(y_sorted)):
             if y_sorted[i][0] >= cut - closest_dist and y_sorted[i][0] <= cut + closest_dist:
                 runwaypts.append(y_sorted[i])
         
         if len(runwaypts) >= 2:
-            runway_mins = [2100000000, 2100000000]
-            rx1 = 2100000000
-            rx2 = 2100000000
-            r2x1 = 2100000000
-            r2x2 = 2100000000
+            runway_min = 2100000000
 
             for i in range(len(runwaypts)):
-                for j in range( i + 1, min(i + 8, len(runwaypts))):
+                for j in range(i + 1, min(i + 8, len(runwaypts))):
                     dst = self.distance(runwaypts[i], runwaypts[j]) 
-                    res = self.checkmins2(dst, runway_mins)
 
-                    if res[1] == 1:
-                        rx1 = runwaypts[i][0]
-                        rx2 = runwaypts[j][0]
-                    elif res[1] == 2:
-                        r2x1 = runwaypts[i][0]
-                        r2x2 = runwaypts[j][0]
-                    elif res[1] == 12:
-                        r2x1 = rx1
-                        r2x2 = rx2
-                        rx1 = runwaypts[i][0]
-                        rx2 = runwaypts[j][0]
+                    if dst < runway_min:
+                        runway_min = dst
+                    #now need to add this dist only if we havent seen it before
+                    ix = runwaypts[i][0]
+                    iy = runwaypts[i][1]
+                    jx = runwaypts[j][0]
+                    jy = runwaypts[j][1]
 
-                    runway_mins = res[0]
+                    if (ix < cut and jx >= cut) or (ix >= cut and jx < cut) or ((ix == cut and jx == cut) and ((iy < midy and jy >= midy) or (iy >= midy and jy < midy))):
+                        self.checkmins(dst)
 
-            if (rx1 < cut and rx2 >= cut) or (rx1 >= cut and rx2 < cut): # this would mean that this pair was not originally accounted for by the d & c
-                self.checkmins(runway_mins[0])
-            if (r2x1 < cut and r2x2 >= cut) or (r2x1 >= cut and r2x2 < cut):
-                self.checkmins(runway_mins[1])
-
-            return runway_mins[0]
+            return runway_min
         else:
             return closest_dist
     
@@ -152,27 +141,3 @@ class ClosestPair:
 
         elif newdist < self.mins[1]:
             self.mins[1] = newdist
-
-    def checkmins2(self, newdist, the_mins): 
-        x = 0 #no change of mins
-        if len(the_mins) == 0:
-            the_mins.append(newdist)
-            x = 1 #first val
-
-        elif len(the_mins) == 1:
-            if newdist < the_mins[0]:
-                the_mins = [newdist,the_mins[0]]
-                x = 12 # first val and second val moved
-            else:
-                the_mins.append(newdist)
-                x = 2 #just 2nd val moved
-
-        elif newdist < the_mins[0]:
-            the_mins = [newdist, the_mins[0]]
-            x = 12 #both
-
-        elif newdist < the_mins[1]:
-            the_mins[1] = newdist
-            x = 2 #just 2nd
-
-        return [the_mins, x]
