@@ -115,7 +115,7 @@ class ClosestPair:
         midy = midpt[1]
 
         for i in range(len(y_sorted)):
-            if y_sorted[i][0] >= cut - closest_dist and y_sorted[i][0] <= cut + closest_dist:
+            if y_sorted[i][0] >= cut - closest_dist and y_sorted[i][0] <= cut + self.mins[1]:
                 runwaypts.append(y_sorted[i])
         
         if len(runwaypts) >= 2:
@@ -137,6 +137,7 @@ class ClosestPair:
                         self.checkmins(dst)
 
             return runway_min
+            
         else:
             return closest_dist
     
