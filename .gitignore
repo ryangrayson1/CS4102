@@ -1,14 +1,13 @@
-*/.DS_Store
-.DS_Store
+**/.DS_Store
 
-*.log
-*/*.aux
-*/*.out
-*/*.log
-*/*.bbl
-*/*.gz
-*/*.fls
-*/*.fdb_latexmk
-*/*.blg
-*/*__pycache__
-*/*.Rhistory
+**/*.log
+**/*.aux
+**/*.out
+**/*.log
+**/*.bbl
+**/*.gz
+**/*.fls
+**/*.fdb_latexmk
+**/*.blg
+**/*__pycache__
+**/*.Rhistory
