@@ -84,14 +84,15 @@ Let $e=(u,v)$ be a minimum-weight edge in an undirected connected graph $G$. Pro
 
 \solution{
     \begin{proof}
-        We proceed by Induction. \\
-        \emph{Base Case:} \\
-             \null\quad When e (a minimum weight edge) is the only edge in G, it must belong to a valid MST of this graph because it is the only edge that can connect the graph, so the base case holds. \\
-        \emph{Inductive Hypothesis:} \\
-            \null\quad Assume that there exists a minimum spanning tree of G with n edges that includes e. \\
-        \emph{Inductive Step:} \\
-            \null\quad Using the MST with n edges that includes e, we can construct a MST with n+1 edges that also includes e by adding the one additional edge to the MST. To determine which edge we will add to the tree, we will choose the edge that connects to the existing tree with minimum edge weight. Since we add one new edge to the new MST, we must also add one new vertex to the MST. We can be sure that this is still a valid MST because the new vertex must get connected to the existing tree in some way, and we have chosen to connect it using the edge with a minimum weight with respect to the existing tree. Thus we have constructed a new valid MST that contains e. \\
-        By the principle of induction, a minimum weight edge, e, must belong to some minimum spanning tree of G.
+    
+        Assume that e is not in any minimum spanning tree of G. \\
+        Thus, there must exist a valid MST that does not contain e. Consider such an MST. If we were to add e to it, we would form a cycle, and there would be now be v total edges. To get rid of the cycle and form another MST, we will select the edge in the cycle with maximum weight and remove it. This edge that we are removing cannot be e, because e has the minimum weight of all the edges in the graph (and if there is a tie for the maximum, we will choose to remove an edge other than e). You will notice that, since we removed an edge and added one, the new MST has v-1 edges like it should. Additionally, since we created one cycle and removed that same cycle, the MST will not contain any cycles, thus it is valid. \\
+        \null \quad There are 2 cases we must consider for the edge we removed and replaced with e: \\
+        \null \quad If the edge from the original MST we removed has the same weight as e, we have constructed a new minimum spanning tree with the same total cost as the original MST we considered, thus this new MST containing e is valid, and we have reached a contradiction. \\
+        \null \quad Otherwise, if the edge we removed had a weight that's greater than e, by removing it from the tree and adding e, we have constructed an MST with a total cost that is less than the original MST. Thus, the MST we were considering was actually not a valid MST. This is a contradiction. \\
+        \null \quad Thus, since assuming e is not in any MST of G led to a contradiction, it must be true that e belongs to some minimum spanning tree of G.
+        
+        
 
     \end{proof}
 }
