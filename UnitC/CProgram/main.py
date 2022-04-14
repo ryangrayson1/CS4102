@@ -3,7 +3,7 @@ import time
 from seam_carving import SeamCarving
 from PIL import Image
 
-fp = Image.open("test1.png")
+fp = Image.open("ducks.jpg")
 pixels = fp.load()
 w, h = fp.size
 image_data = [[[0 for k in range(3)] for j in range(w)] for i in range(h)]

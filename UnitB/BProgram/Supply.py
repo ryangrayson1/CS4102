@@ -1,3 +1,4 @@
+#Ryan Grayson
 # CS4102 Spring 2022 - Unit B Programming
 #################################
 # Collaboration Policy: You are encouraged to collaborate with up to 3 other
@@ -13,7 +14,7 @@
 # considered in breach of this policy. Please refer to the syllabus for a
 # complete description of the collaboration policy.
 #################################
-# Your Computing ID:
+# Your Computing ID: rtg5xkh
 # Collaborators:
 # Sources: Introduction to Algorithms, Cormen
 #################################
@@ -23,18 +24,6 @@ class Node():
         self.id = id
         self.name = name
         self.type = type
-
-class StoreGroup():
-    def __init__(self, id, idoffset, stores, links):
-        self.id = id
-        self.idoffset = idoffset
-        self.stores = stores
-        self.links = links
-
-class PRDGroup():
-    def __init__(self, prds, links):
-        self.prds = prds
-        self.links = links
 
 class DisjointSet():
     def __init__(self, n): #this is makeset
@@ -53,12 +42,14 @@ class DisjointSet():
         l2 = self.findSet(j)
         self.sets[l1] = l2
 
-
-
 class Supply:
     def __init__(self):
         return
 
+    store_to_dc = {}
+    dc_to_store = {}
+    graph_nodes = {}
+    valid_links = []
     # This is the method that should set off the computation
     # of the supply chain problem.  It takes as input a list containing lines of input
     # as strings.  You should parse that input and then call a
@@ -70,90 +61,21 @@ class Supply:
     def compute(self, file_data):
         return self.min_cost(file_data)
 
-    def parse_file_stores(self, file):
-        #Step 1: create all store and distribution center groups
-        nodes, total_links = file[0].split()
-        nodes = int(nodes)
-        total_links = int(total_links)
-        ids = 0
-        i = 1
-        store_groups = []
-        sg = 0
-        while i <= nodes:
-            name, node_type = file[i].split()
-            if node_type[0] == 'd':
-                stores = {}
-                stores[name] = Node(ids, name, 'd')
-                start_id = ids
-                ids += 1
-                
-                j = i+1
-                while j <= nodes:
-                    n, t = file[j].split()
-                    if t[0] != 's':
-                        break
-                    stores[n] = Node(ids, n, 's')
-                    ids += 1
-                    j += 1
 
-                new_sg = StoreGroup(sg, start_id, stores, [])
-                store_groups.append(new_sg)
-                sg += 1
-                i = j
-            else:
-                i += 1
-        
-        while i <= nodes + total_links:
-            n1, n2, cost = file[i].split()
-            for j in range(len(store_groups)):
-                if n1 in store_groups[j].stores and n2 in store_groups[j].stores:
-                    store_groups[j].links.append([n1, n2, cost])
-
-            i += 1
-
-        return store_groups
-
-    def parse_file_prds(self, file):
-        nodes, total_links = file[0].split()
-        nodes = int(nodes)
-        total_links = int(total_links)
-        i = 1
-        prds = {}
-        ids = 0
-        while i <= nodes:
-            n, t = file[i].split()
-            if t[0] != 's':
-                prds[n] = Node(ids, n, t)
-                ids += 1
-            i += 1
-
-        links = []
-        while i <= nodes + total_links:
-            n1, n2, cost = file[i].split()
-            if n1 in prds and n2 in prds and (prds[n1].type != 'd' or prds[n2].type != 'd'):
-                links.append([n1, n2, cost])
-            i += 1
-
-        newprd = PRDGroup(prds, links)
-        return newprd
-
-
-    #will do kruskals on a certain subset of nodes and links and return the total cost of the MST
-    def kruskals(self, nodes, links, idoffset): 
-        n = len(nodes)
-
-        links = sorted(links, key=lambda x: x[2])
+    def kruskals(self): 
+        n = len(self.graph_nodes)
+        links = sorted(self.valid_links, key=lambda x: x[2])
 
         disjointsets = DisjointSet(n)
         li = 0
         edges_in_tree = 0
         cost = 0
-        while edges_in_tree < n - 1:
+        while edges_in_tree < n - 1 and li < len(links):
             sw = links[li] # smallest weight edge
-            node1 = nodes[sw[0]]
-            node2 = nodes[sw[1]]
-            set1 = disjointsets.findSet(node1.id - idoffset)
-            set2 = disjointsets.findSet(node2.id - idoffset)
+            node1 = self.graph_nodes[sw[0]]
+            node2 = self.graph_nodes[sw[1]]
+            set1 = disjointsets.findSet(node1.id)
+            set2 = disjointsets.findSet(node2.id)
             if set1 != set2:
                 edges_in_tree += 1
                 cost += int(sw[2])
@@ -161,15 +83,68 @@ class Supply:
             li += 1
         return cost
 
-    def min_cost(self, file_data):
-        cost = 0
-        #Step 1: perform Kruskal's on each "store group"
-        sgs = self.parse_file_stores(file_data)
-        for sg in sgs:
-            cost += self.kruskals(sg.stores, sg.links, sg.idoffset)
 
-        #Step 2: perform Kruskal's on groups with ports, rail hubs, and dist centers
-        all_prds = self.parse_file_prds(file_data)
-        cost += self.kruskals(all_prds.prds, all_prds.links, 0)
-        
-        return cost
+    def parse_file(self, file):
+        nodes, total_links = file[0].split()
+        nodes = int(nodes)
+        total_links = int(total_links)
+        ids = 0
+        i = 1
+        while i < nodes + 1:
+            name, type = file[i].split()
+            self.graph_nodes[name] = Node(ids, name, type)
+            ids += 1
+            if type == 'dist-center':
+                self.dc_to_store[name] = []
+                j = i + 1
+                while j < nodes+1:
+                    n, t = file[j].split()
+                    if t != 'store':
+                        break
+                    self.graph_nodes[n] = Node(ids, n, t)
+                    ids += 1
+                    self.dc_to_store[name].append(n)
+                    self.store_to_dc[n] = name
+                    j += 1
+                i = j
+            else:
+                i += 1
+
+        i = nodes + 1
+        while i < nodes + total_links + 1:
+            n1, n2, cost = file[i].split()
+            if n1 in self.graph_nodes and n2 in self.graph_nodes:
+                if self.valid_connection(n1, n2):
+                    self.valid_links.append([n1, n2, cost])
+            i += 1
+
+    def valid_connection(self, n1, n2):
+        t1 = self.graph_nodes[n1].type
+        t2 = self.graph_nodes[n2].type
+        n1 = self.graph_nodes[n1].name
+        n2 = self.graph_nodes[n2].name
+        if t1 == 'dist-center' and t2 == 'store':
+            if n2 not in self.dc_to_store[n1]:
+                return False
+        elif t1 == 'store' and t2 == 'dist-center':
+            if n1 not in self.dc_to_store[n2]:
+                return False
+        elif t1 == 'port' and t2 == 'store':
+            return False
+        elif t1 == 'rail-hub' and t2 == 'store':
+            return False
+        elif t1 == 'dist-center' and t2 == 'dist-center':
+            return False
+        elif t1 == 'store' and t2 == 'port':
+            return False
+        elif t1 == 'store' and t2 == 'rail-hub':
+            return False
+        return True
+            
+
+    def min_cost(self, file_data):
+        #Step 1: remove all invalid edges
+        self.parse_file(file_data)
+
+        #Step 2: perform Kruskal's on the graph with only valid edges
+        return self.kruskals()

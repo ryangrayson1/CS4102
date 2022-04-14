@@ -1,47 +1,21 @@
-18 26
+7 13
 p1 port
-p2 port
-p3 port
 rh1 rail-hub
 rh2 rail-hub
-rh3 rail-hub
-rh4 rail-hub
-rh5 rail-hub
 dc1 dist-center
 dc2 dist-center
-dc3 dist-center
 s1 store
 s2 store
-s3 store
-s5 store
-s6 store
-s7 store
-s8 store
-p1 dc1 1
-p1 rh1 1001
-p1 rh2 1004
-p1 s3 2
-p2 dc1 1005
-p2 rh3 1006
-p2 rh4 1
-p3 rh4 50
-p3 dc1 1007
-p3 dc2 1009
-p3 rh5 2
-p3 s8 1
-rh1 rh2 1002
-rh1 dc3 1003
-rh2 rh4 2
-rh2 dc3 3
-rh3 dc2 1008
-rh5 dc2 7
-dc1 s1 2
-dc1 s2 3
-dc1 s3 9
-dc2 s5 2
-dc3 s7 1
-s1 s2 10
-s2 s3 1
-s5 s6 7
-s6 s8 9
-s5 s8 1
+p1 rh1 5
+p1 rh2 1
+p1 dc1 4
+rh1 dc1 1
+rh2 dc2 1
+rh1 rh2 2
+rh2 dc1 2
+rh2 s1 1
+dc1 s2 1
+dc2 s2 1
+dc1 s1 6
+dc2 s1 3
+s2 s1 2

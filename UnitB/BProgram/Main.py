@@ -1,8 +1,9 @@
+# ATTEMPT 2
 import sys
 import time
 from Supply import Supply
 
-fp = open("test1.txt", 'r')
+fp = open("complete14.txt", 'r')
 lines = fp.readlines()
 inputLines = []
 for line in lines:

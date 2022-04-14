@@ -35,16 +35,14 @@ class SeamCarving:
         self.colors = image
         self.r = len(image)
         self.c = len(image[0])
-        self.printPixels()
 
         # Initialize all energies
         for j in range(self.r):
-            energies_for_row = []
+            self.energies.append([])
             for i in range(self.c):
-                energies_for_row.append(self.energy(j, i))
-            self.energies.append(energies_for_row)
+                self.energies[j].append(self.energy(j, i))
 
-        #getting energy sum for first column as placeholder for mem
+        #getting energy sum for whole first column as placeholder for mem
         nrg1 = 0
         for f in range(self.r):
             nrg1 += self.energies[f][0]
@@ -118,7 +116,6 @@ class SeamCarving:
                     nextx = backtrace[-1] + 1
 
             backtrace.append(nextx)
-            print(backtrace.reverse())
 
         self.seam_xs = list(reversed(backtrace))
         return low_nrg
@@ -152,24 +149,3 @@ class SeamCarving:
                     sum += self.difference(j, i, b, a)
 
         return sum / adj
-
-
-    def printPixels(self):
-        print("rows: " + str(len(self.colors)))
-        print("cols: " + str(len(self.colors[0])))
-        # j = row, i = column
-        for j in range(len(self.colors)):
-            for i in range(len(self.colors[j])):
-                print("[", end="")
-                for k in range(3):
-                    if self.colors[j][i][k] < 100:
-                        print(" ", end="")
-                    if self.colors[j][i][k] < 10:
-                        print(" ", end="")
-
-                    if k != 2:
-                        print(str(self.colors[j][i][k]) + ", ", end="")
-                    else:
-                        print(str(self.colors[j][i][k]) + "]", end="")
-                print(end=" ")
-            print()
