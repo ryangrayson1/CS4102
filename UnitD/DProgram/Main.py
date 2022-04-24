@@ -1,9 +1,9 @@
 from __future__ import print_function
 import sys
 import time
-from tiling_dino import TilingDino
+from TilingDino import TilingDino
 
-fp = open("test1.txt", 'r')
+fp = open("test2.txt", 'r')
 fulllines = fp.readlines()
 lines = []
 for line in fulllines:
