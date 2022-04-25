@@ -18,19 +18,29 @@ class MaxRooks:
         G = networkx.DiGraph()
         G.add_node('source')
         G.add_node('target')
-        #add all black squares as nodes for potential rooks
-        for i in range(r):
-            for j in range(c):
-                if lines[i][j] == '#':
-                    G.add_node('r ' + str(j) + ' ' + str(i))
-                    G.add_edge('source', 'w ' + str(j) + ' ' + str(i), capacity=1)
-        
+        #add all rows and colums that have a rook
+        for j in range(r):
+            for i in range(c):
+                if lines[j][i] == '#':
+                    G.add_node('r ' + str(j))
+                    G.add_edge('source', 'r ' + str(j), capacity=1)
+                    break
+        for i in range(c):
+            for j in range(r):
+                if lines[j][i] == "#":
+                    G.add_node('c ' + str(i))
+                    G.add_edge('c ' + str(i), 'target', capacity=1)
+                    break
+
+        #add connection between a row and a column if they intersect at a rook
+        for j in range(r):
+            for i in range(c):
+                if lines[j][i] == '#':
+                    G.add_edge('r ' + str(j), 'c ' + str(i), capacity=1)
          
         mf = networkx.maximum_flow(G, 'source', 'target')
         mf = list(mf)
-        print(mf)
-
-        return
+        return mf[0]
 
     def print_image(self, lines):
         for line in lines:
