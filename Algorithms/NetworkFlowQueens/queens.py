@@ -1,12 +1,12 @@
 ### Ryan Grayson
 '''
 Task: given a grid of squares where the black squares represent a chess-like board (but could be any shape),
-compute the maximum number of rooks that can be placed on the board without any rooks being able to capture each other.
+compute the maximum number of queens that can be placed on the board without any rooks being able to capture each other.
 We can solve this with bipartite matching and the ford-fulkerson network flow algorithm.
 '''
 import networkx
 
-class MaxRooks:
+class MaxQueens:
     def __init__(self):
         return
 
